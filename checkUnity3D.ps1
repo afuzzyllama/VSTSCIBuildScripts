@@ -34,11 +34,18 @@ elseif(!(Test-Path -Path "$DEPENDENCIESDIR\$CurrentVersion"))
     wget -OutFile "$DEPENDENCIESDIR\$CurrentVersion\$CurrentVersion.exe" $CurrentDownloadLink 
     Start-Process -Wait -FilePath "$DEPENDENCIESDIR\$CurrentVersion\$CurrentVersion.exe" -ArgumentList "/S /D=$DEPENDENCIESDIR\$CurrentVersion\Unity"
 
+    if((Test-Path -Path "$DEPENDENCIESDIR\latest"))
+    {
+        cmd /c rmdir /q "$DEPENDENCIESDIR\latest"
+    }
+    cmd /c mklink /D "$DEPENDENCIESDIR\latest" "$DEPENDENCIESDIR\$CurrentVersion"
+
     Write-Host "Installed: $CurrentVersion"
 }
 else
 {
     Write-Host "Current version already installed: $CurrentVersion"
+    
 }
 
 Remove-Item -Path $ARCHIVECONTENT
