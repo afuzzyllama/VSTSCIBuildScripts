@@ -1,4 +1,4 @@
-. C:\agent\profile.ps1
+. C:\agent\buildScripts\profile.ps1
 
 $EMAIL = Read-Host "Enter email address for service account: "
 
