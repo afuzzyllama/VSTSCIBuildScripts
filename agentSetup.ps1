@@ -4,8 +4,6 @@ $EMAIL = Read-Host "Enter email address for service account: "
 
 $SSHDIR = "~\.ssh"
 $SSHFILE = "$SSHDIR\id_rsa"
-$KNOWNHOSTS = "$SSHDIR\known_hosts"
-$CONFIG = "$SSHDIR\config"
 if(!(Test-Path -Path $SSHDIR))
 {
     New-Item -ItemType directory -Path $SSHDIR
