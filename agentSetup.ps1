@@ -2,7 +2,7 @@
 
 $EMAIL = Read-Host "Enter email address for service account: "
 
-$SSHDIR = "~\.ssh"
+$SSHDIR = "$env:USERPROFILE\.ssh"
 $SSHFILE = "$SSHDIR\id_rsa"
 if(!(Test-Path -Path $SSHDIR))
 {
