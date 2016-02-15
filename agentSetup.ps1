@@ -1,8 +1,8 @@
 . C:\agent\profile.ps1
 
-$EMAIL = Read-Host "Enter email of service account: "
+$EMAIL = Read-Host "Enter email address for service account: "
 
-$SSHDIR = "C:\Windows\ServiceProfiles\LocalService\.ssh"
+$SSHDIR = "~\.ssh"
 $SSHFILE = "$SSHDIR\id_rsa"
 $KNOWNHOSTS = "$SSHDIR\known_hosts"
 $CONFIG = "$SSHDIR\config"
