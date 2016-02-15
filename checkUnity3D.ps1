@@ -19,8 +19,11 @@ $CurrentDownloadLink = Select-String -Path $ARCHIVECONTENT -Pattern $Regex -AllM
 $Regex = "UnitySetup32-[0-9]+\.[0-9]+\.[0-9]+f[0-9]+"
 $CurrentVersion = $CurrentDownloadLink | Select-String -Pattern $Regex -AllMatches  | Select-Object -First 1 | %{$_.Matches} | %{$_.Value}
 
-
-if(!(Test-Path -Path "$DEPENDENCIESDIR\$CurrentVersion"))
+if(!($CurrentVersion))
+{
+    Write-Error -Category InvalidResult -Message "Cannot obtain the most current version of Unity3D."
+}
+elseif(!(Test-Path -Path "$DEPENDENCIESDIR\$CurrentVersion"))
 {
     Get-ChildItem -Path $DEPENDENCIESDIR | ForEach-Object {
         Start-Process -Wait -FilePath "$DEPENDENCIESDIR\$_\Unity\Editor\Uninstall.exe" -ArgumentList "/S _?=$DEPENDENCIESDIR\$_\Unity\Editor\"
