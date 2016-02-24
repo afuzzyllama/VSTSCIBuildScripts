@@ -20,12 +20,12 @@
 
 . "$env:BUILDSCRIPTDIR\sharedFunctions.ps1"
 
-$assemblyVersion = getAssemblyVersion
-
-# Replace the version with the generated version
 $assemblyInfoFile = Join-Path  $env:BUILD_SOURCESDIRECTORY $env:ASSEMBLYINFORELATIVEPATH 
 $assemblyInfoFile = Join-Path  $assemblyInfoFile "AssemblyInfo.cs"
 
+$assemblyVersion = getAssemblyVersion $assemblyInfoFile
+
+# Replace the version with the generated version
 $assemblyInfo = [system.io.file]::ReadAllText($assemblyInfoFile)
 
 $assemblyInfo = [regex]::Replace($assemblyInfo, "\[assembly: AssemblyVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]", [string]::Format("[assembly: AssemblyVersion(`"{0}.0`")]", $assemblyVersion.AssemblyVersion))
@@ -38,3 +38,4 @@ Add-Content $assemblyInfoFile ([string]::Format("[assembly: AssemblyInformationa
 $assemblyVersion.AssemblyInformationalVersion | Out-File "$env:BUILD_STAGINGDIRECTORY\VERSION"
 
 Write-Host ([string]::Format("Building version: {0}", $assemblyVersion.AssemblyInformationalVersion))
+
