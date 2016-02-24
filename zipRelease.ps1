@@ -9,7 +9,7 @@
     Requires the following custom environment variables to be set in TFS:
     
         BuildScriptDir            - Absolute path to where all powershell scripts for this agent are stored
-        ASSEMBLYINFORELATIVEPATH  - Relative path to the AssemblyInfo.cs file in the git repository
+        AssemblyInfoRelativePath  - Relative path to the AssemblyInfo.cs file in the git repository
 #>
 
 . "$env:BUILDSCRIPTDIR\sharedFunctions.ps1"
