@@ -14,28 +14,34 @@
     Requires the following custom environment variables to be set in TFS:
 
         BuildScriptDir            - Absolute path to where all powershell scripts for this agent are stored
-        AssemblyInfoRelativePath  - Relative path to AssemblyInfo.cs file
+        AssemblyInfoRelativePaths - Array of relative paths to AssemblyInfo.cs files. This can sync multiple AssemblyInfo files, 
+                                    but the major and minor versions need to be identical.
 
 #>
 
 . "$env:BUILDSCRIPTDIR\sharedFunctions.ps1"
 
-$assemblyInfoFile = Join-Path  $env:BUILD_SOURCESDIRECTORY $env:ASSEMBLYINFORELATIVEPATH 
-$assemblyInfoFile = Join-Path  $assemblyInfoFile "AssemblyInfo.cs"
+$assemblyInfoRelativePaths = $env:ASSEMBLYINFORELATIVEPATHS.Split(",")
 
-$assemblyVersion = getAssemblyVersion $assemblyInfoFile
+foreach($assemblyInfoRelativePath in $assemblyInfoRelativePaths)
+{
+    $assemblyInfoFile = Join-Path  $env:BUILD_SOURCESDIRECTORY $assemblyInfoRelativePath.Trim()
+    $assemblyInfoFile = Join-Path  $assemblyInfoFile "AssemblyInfo.cs"
+    
+    $assemblyVersion = getAssemblyVersion $assemblyInfoFile
 
-# Replace the version with the generated version
-$assemblyInfo = [system.io.file]::ReadAllText($assemblyInfoFile)
+    # Replace the version with the generated version
+    $assemblyInfo = [system.io.file]::ReadAllText($assemblyInfoFile)
 
-$assemblyInfo = [regex]::Replace($assemblyInfo, "\[assembly: AssemblyVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]", [string]::Format("[assembly: AssemblyVersion(`"{0}.0`")]", $assemblyVersion.AssemblyVersion))
-$assemblyInfo = [regex]::Replace($assemblyInfo, "\[assembly: AssemblyFileVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]", [string]::Format("[assembly: AssemblyFileVersion(`"{0}.0`")]", $assemblyVersion.AssemblyVersion))
+    $assemblyInfo = [regex]::Replace($assemblyInfo, "\[assembly: AssemblyVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]", [string]::Format("[assembly: AssemblyVersion(`"{0}.0`")]", $assemblyVersion.AssemblyVersion))
+    $assemblyInfo = [regex]::Replace($assemblyInfo, "\[assembly: AssemblyFileVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]", [string]::Format("[assembly: AssemblyFileVersion(`"{0}.0`")]", $assemblyVersion.AssemblyVersion))
 
-$assemblyInfo | Out-File $assemblyInfoFile
+    $assemblyInfo | Out-File $assemblyInfoFile
 
-# Append the informational version to the end of the file
-Add-Content $assemblyInfoFile ([string]::Format("[assembly: AssemblyInformationalVersion(`"{0}`")]", $assemblyVersion.AssemblyInformationalVersion))
-$assemblyVersion.AssemblyInformationalVersion | Out-File "$env:BUILD_STAGINGDIRECTORY\VERSION"
+    # Append the informational version to the end of the file
+    Add-Content $assemblyInfoFile ([string]::Format("[assembly: AssemblyInformationalVersion(`"{0}`")]", $assemblyVersion.AssemblyInformationalVersion))
+    $assemblyVersion.AssemblyInformationalVersion | Out-File "$env:BUILD_STAGINGDIRECTORY\VERSION"
+}
 
 Write-Host ([string]::Format("Building version: {0}", $assemblyVersion.AssemblyInformationalVersion))
 
