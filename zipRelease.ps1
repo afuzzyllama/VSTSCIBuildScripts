@@ -8,8 +8,8 @@
     
     Requires the following custom environment variables to be set in TFS:
     
-        BuildScriptDir            - Absolute path to where all powershell scripts for this agent are stored
-        AssemblyInfoRelativePath  - Relative path to the AssemblyInfo.cs file in the git repository
+        BuildScriptDir             - Absolute path to where all powershell scripts for this agent are stored
+        AssemblyInfoRelativePaths  - Relative path to the AssemblyInfo.cs file in the git repository
 #>
 
 . "$env:BUILDSCRIPTDIR\sharedFunctions.ps1"
@@ -17,7 +17,10 @@
 Add-Type -Assembly System.IO.Compression.FileSystem
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
 
-$assemblyInfoFile = Join-Path  $env:BUILD_SOURCESDIRECTORY $env:ASSEMBLYINFORELATIVEPATH 
+$assemblyInfoRelativePaths = $env:ASSEMBLYINFORELATIVEPATHS.Split(",")
+
+
+$assemblyInfoFile = Join-Path  $env:BUILD_SOURCESDIRECTORY $assemblyInfoRelativePaths[0]
 $assemblyInfoFile = Join-Path  $assemblyInfoFile "AssemblyInfo.cs"
 
 $assemblyVersion = getAssemblyVersion $assemblyInfoFile
