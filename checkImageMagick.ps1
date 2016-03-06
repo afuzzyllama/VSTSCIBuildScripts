@@ -4,10 +4,6 @@
 
     Will install ImageMagick at $env:AGENT_ROOTDIRECTORY\dependencies\ImageMagick
     This script will uninstall any previous versions of ImageMagick installed before installing the next version
-
-    Written by:
-    afuzzyllama
-    Twitter: @afuzzyllama
 #>
 
 Add-Type -Assembly System.IO.Compression.FileSystem
