@@ -1,0 +1,25 @@
+{
+  "id": "C8F58A04-BE9B-42AA-A2BF-593CAFB9D0EB",
+  "name": "ShutdownVSPerfMon",
+  "friendlyName": "Shutdown VS Performance Monitor",
+  "description": "Shutdowns the VS performance monitor",
+  "category": "Dependency",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Shutdown VS Performance Monitor",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\ShutdownVSPerfMon.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "C49AD93B-7A2B-4262-92FE-FB1F5C2F14F7",
+  "name": "ConvertToCoverageXml",
+  "friendlyName": "Convert to Coverage XML",
+  "description": "Converts coverage file to coveragexml file",
+  "category": "Build",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "groups": [
+    {
+      "name": "coverageFileConfiguration",
+      "displayName": "Coverage File Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "CoverageFilePath",
+      "type": "filePath",
+      "label": "Input Coverage File Path",
+      "required": true,
+      "helpMarkDown": "Input Coverage File Path",
+      "groupName": "coverageFileConfiguration"
+    },
+    {
+      "name": "CoverageXmlFilePath",
+      "type": "filePath",
+      "label": "Output CoverageXml File Path",
+      "required": true,
+      "helpMarkDown": "Output CoverageXml File Path",
+      "groupName": "coverageFileConfiguration"
+    }
+  ],
+  "instanceNameFormat": "Convert to Coverage XML",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\CovertToCoverageXml.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

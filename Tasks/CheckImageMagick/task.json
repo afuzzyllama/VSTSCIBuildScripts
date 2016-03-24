@@ -1,0 +1,25 @@
+{
+  "id": "889F6D91-974F-4D6F-B90A-C309AE85D3BD",
+  "name": "CheckImageMagick",
+  "friendlyName": "Install/Update ImageMagick",
+  "description": "Installs or updates ImageMagick dependency for build process",
+  "category": "Dependency",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Install/Update ImageMagick",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\CheckImageMagick.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

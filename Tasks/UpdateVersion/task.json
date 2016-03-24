@@ -1,0 +1,42 @@
+{
+  "id": "9F828ADA-AFAA-4CAD-93EB-9D487459EA37",
+  "name": "UpdateVersion",
+  "friendlyName": "Update AssemblyInfo Version",
+  "description": "Updates AssemblyInfo.cs files with the version of the build",
+  "category": "Build",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "groups": [
+    {
+      "name": "assemblyInfoConfiguration",
+      "displayName": "AssemblyInfo Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "AssemblyInfoFile",
+      "type": "filePath",
+      "label": "AssemblyInfo File Path",
+      "required": true,
+      "helpMarkDown": "AssemblyInfo file path to update with the version in",
+      "groupName": "assemblyInfoConfiguration"
+    }
+  ],
+  "instanceNameFormat": "Update AssemblyInfo Version",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\UpdateVersion.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

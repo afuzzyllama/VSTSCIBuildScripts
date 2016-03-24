@@ -1,0 +1,74 @@
+{
+  "id": "23878692-DF93-4CCC-9B2A-C1A79E51D44D",
+  "name": "CreateGitTagAndRelease",
+  "friendlyName": "Create Git Tag and Release",
+  "description": "Creates a git tag and then marks that tag as the latest release",
+  "category": "Release",
+  "visibility": [
+                "Release"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "groups": [
+    {
+      "name": "gitConfiguration",
+      "displayName": "Git Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "GitUsername",
+      "type": "string",
+      "label": "Git Username",
+      "required": true,
+      "helpMarkDown": "Username for user to execute the git release",
+      "groupName": "gitConfiguration"
+    },
+    {
+      "name": "GitRepoOwner",
+      "type": "string",
+      "label": "Git Repository Owner",
+      "required": true,
+      "helpMarkDown": "User or organization that owns the repository to release to",
+      "groupName": "gitConfiguration"
+    },
+    {
+      "name": "GitRepo",
+      "type": "string",
+      "label": "Git Repository",
+      "required": true,
+      "helpMarkDown": "Git repository to release to",
+      "groupName": "gitConfiguration"
+    },
+    {
+      "name": "GitProfileName",
+      "type": "string",
+      "label": "Git Profile Name",
+      "required": true,
+      "helpMarkDown": "The name of the user to be listed in the git tag",
+      "groupName": "gitConfiguration"
+    },
+    {
+      "name": "GitUserEmail",
+      "type": "string",
+      "label": "Git User Email",
+      "required": true,
+      "helpMarkDown": "The email of the user to be listed in the git tag",
+      "groupName": "gitConfiguration"
+    }
+  ],
+  "instanceNameFormat": "Create Git Tag and Release",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\CreateGitTagAndRelease.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

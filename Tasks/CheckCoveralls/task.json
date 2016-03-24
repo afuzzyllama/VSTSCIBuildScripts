@@ -1,0 +1,25 @@
+{
+  "id": "E556C60C-A976-46D2-AF6E-9D84BDB5FC84",
+  "name": "CheckCoveralls",
+  "friendlyName": "Install/Update Coveralls.NET",
+  "description": "Installs or updates Coveralls.NET tool",
+  "category": "Dependency",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Install/Update Coveralls.NET",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\CheckCoveralls.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

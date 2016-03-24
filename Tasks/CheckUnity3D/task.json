@@ -1,0 +1,25 @@
+{
+  "id": "AB314244-F424-46E8-BC02-976A686061EC",
+  "name": "CheckUnity3D",
+  "friendlyName": "Install/Update Unity3D",
+  "description": "Installs or updates Unity3D dependency for build process",
+  "category": "Dependency",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Install/Update Unity3D",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\CheckUnity3D.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

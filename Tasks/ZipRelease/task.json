@@ -1,0 +1,42 @@
+{
+  "id": "3D1257F3-B12E-48D3-8FFC-38CFCF0416AC",
+  "name": "ZipRelease",
+  "friendlyName": "Zip Release",
+  "description": "Create an archive of release artifacts to release",
+  "category": "Release",
+  "visibility": [
+                "Release"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "groups": [
+    {
+      "name": "zipConfiguration",
+      "displayName": "Zip Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "ReleaseFolder",
+      "type": "filePath",
+      "label": "Release Folder",
+      "required": true,
+      "helpMarkDown": "Folder that contains files to zip into release",
+      "groupName": "zipConfiguration"
+    }
+  ],
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Zip release",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\ZipRelease.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

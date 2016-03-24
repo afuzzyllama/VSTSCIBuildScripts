@@ -1,0 +1,48 @@
+{
+  "id": "3AF80A39-6C01-4F36-A8FD-1AD479366119",
+  "name": "PublishCoveralls",
+  "friendlyName": "Publish to Coveralls",
+  "description": "Publishes a coveragexml file to Coveralls",
+  "category": "Build",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "groups": [
+    {
+      "name": "coverallsConfiguration",
+      "displayName": "Coveralls Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "CoverageXmlFilePath",
+      "type": "filePath",
+      "label": "CoverageXml File Path",
+      "required": true,
+      "groupName": "coverallsConfiguration"
+    },
+    {
+      "name": "CoverallsRepoToken",
+      "type": "string",
+      "label": "Coveralls Repository Token",
+      "required": true,
+      "groupName": "coverallsConfiguration"
+    }
+  ],
+  "instanceNameFormat": "Publish to Coveralls",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\PublishCoveralls.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

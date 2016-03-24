@@ -5,13 +5,20 @@
     Will install ImageMagick at $env:AGENT_ROOTDIRECTORY\dependencies\ImageMagick
     This script will uninstall any previous versions of ImageMagick installed before installing the next version
 #>
+[cmdletbinding()]
+param()
 
 Add-Type -Assembly System.IO.Compression.FileSystem
 
-$archiveContentFile = "$env:AGENT_ROOTDIRECTORY\content.html"
-$dependenciesDir = "$env:AGENT_ROOTDIRECTORY\dependencies\ImageMagick"
+$archiveContentFile = "$env:TEMPDIR\content.html"
+$dependenciesDir = "$env:DEPENDENCIESDIR\dependencies\ImageMagick"
 
 Write-Host "Checking for latest version of ImageMagick"
+
+if(!(Test-Path -Path $env:TEMPDIR))
+{
+    New-Item -ItemType directory -Path $env:TEMPDIR | Out-Null
+}
 
 # Create the dependencies directory if it does not exist 
 if(!(Test-Path -Path $dependenciesDir))

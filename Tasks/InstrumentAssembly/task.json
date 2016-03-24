@@ -1,0 +1,42 @@
+{
+  "id": "D112F51F-37C1-4FD7-A5ED-25EC6CC7E6D1",
+  "name": "InstrumentAssembly",
+  "friendlyName": "Instrument Assembly",
+  "description": "Instruments an assembly with vsinstr",
+  "category": "Build",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "minimumAgentVersion": "1.89.0",
+  "groups": [
+    {
+      "name": "instrumentConfiguration",
+      "displayName": "Instrument Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "AssemblyFile",
+      "type": "filePath",
+      "label": "Assembly File Path",
+      "required": true,
+      "helpMarkDown": "Assembly file to instrument",
+      "groupName": "instrumentConfiguration"
+    }
+  ],
+  "instanceNameFormat": "Instrument Assembly",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\InstrumentAssembly.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

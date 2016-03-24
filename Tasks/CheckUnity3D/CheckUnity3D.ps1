@@ -2,14 +2,21 @@
     Script to check that agent is running the most current version of Unity3D.  
     This script uses environment variables defined by the TFS build process.
 
-    Will install the Unity3D with Windows build support at $env:AGENT_ROOTDIRECTORY\dependencies\Unity
+    Will install the Unity3D with Windows build support at $env:DEPENDENCIESDIR\Unity
     This script will uninstall any previous versions of Unity3D installed before installing the next version
 #>
+[cmdletbinding()]
+param()
 
-$archiveContentFile = "$env:AGENT_ROOTDIRECTORY\content.html"
-$dependenciesDir = "$env:AGENT_ROOTDIRECTORY\dependencies\Unity"
+$archiveContentFile = "$env:TEMPDIR\content.html"
+$dependenciesDir = "$env:DEPENDENCIESDIR\Unity"
 
 Write-Host "Checking for latest version of Unity3D"
+
+if(!(Test-Path -Path $env:TEMPDIR))
+{
+    New-Item -ItemType directory -Path $env:TEMPDIR | Out-Null
+}
 
 # Create the dependencies directory if it does not exist 
 if(!(Test-Path -Path $dependenciesDir))
@@ -73,5 +80,4 @@ elseif(!(Test-Path -Path "$dependenciesDir\$currentVersion"))
 else
 {
     Write-Host "Current version already installed: $currentVersion"
-    
 }

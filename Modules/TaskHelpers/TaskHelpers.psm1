@@ -1,59 +1,82 @@
-<#
-    Collection of functions that are used across multiple scripts.
+function Get-VSLatestVersion
+{
+    $regPath = "HKLM:\SOFTWARE\Microsoft\VisualStudio"
+	if (-not (Test-Path $regPath))
+	{
+		return $null
+	}
+	
+	$keys = Get-Item $regPath | %{$_.GetSubKeyNames()} -ErrorAction SilentlyContinue
+	$version = Get-LatestVersion $keys
 
-    Requires the following custom environment variables to be set in TFS:
+	if ([string]::IsNullOrWhiteSpace($version))
+	{
+		return $null
+	}
+	return $version
+}
+
+function Get-LatestVersion($keys)
+{
+    [decimal]$decimalKey = $null
+	[decimal]$latestVersion = 0.0
+	[string]$latestVersionString = "00"
+	foreach ($key in $keys)
+	{
+		if([decimal]::TryParse($key, [ref]$decimalKey) -eq $true)
+		{
+			if($latestVersion -lt $decimalKey)
+			{
+				$latestVersion = $decimalKey
+				$latestVersionString = $key.Replace(".", "")
+			}
+		}
+	}
+
+	return $latestVersionString
+}
+
+function Get-VSRootPath
+{
+    $version = Get-VSLatestVersion
     
-        AssemblyInfoRelativePath - Relative path to AssemblyInfo.cs file
+    if($version -eq $null)
+    {
+        return $null
+    }
+    
+    $vsComnDir = [Environment]::GetEnvironmentVariable("VS$($version)COMNTools")
+    
+    if($vsComnDir -eq $null)
+    {
+        return $null
+    }
+    
+    return [System.IO.Path]::GetFullPath(Join-Path $vsComnDir "..\..\")
+}
 
-#>
+Function Get-VSTSConfiguration([string]$jsonFile)
+{
+    $json = Get-Content $jsonFile
+    
+    $configuration = ConvertFrom-Json $json
+    
+    return $configuration
+}
 
 <#
     Determines the assembly version of the project.  This function works during the build process
 
-    Parameters:
-
-        assemblyInfoFile - Path to AssemblyInfo.cs    
-    
     Returns:
         
-        Object that contains the assembly version and the assembly informational version
+        String representation of assembly version 
 
 
 #>
-Function getAssemblyVersion([string]$assemblyInfoFile)
+Function Get-AssemblyVersion()
 {
-    $assemblyInfo = [system.io.file]::ReadAllText($assemblyInfoFile)
-    
-    $assemblyInfoVersionString = [regex]::Matches($assemblyInfo, "\[assembly: AssemblyVersion\(`"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`"\)\]")
-    $assemblyInfoVersion = [regex]::Matches($assemblyInfoVersionString, "[0-9]+\.[0-9]+") 
-    $assemblyInfoVersion = [string]$assemblyInfoVersion[0]
-        
-    $returnObject = New-Object -TypeName PSObject -Property @{
-            AssemblyVersion              = [string]::Format("{0}.{1}", $assemblyInfoVersion, $env:BUILD_BUILDID);
-            AssemblyInformationalVersion = [string]::Format("{0}.{1}.{2}", $assemblyInfoVersion, $env:BUILD_BUILDID, $env:BUILD_SOURCEVERSION.SubString(0,7))
-        }
-
-    Return $returnObject
-}
-
-<#
-
-    Pulls the assembly informational version from a file that contains the version number
-
-    Parameters:
-
-        path - Path to file that contains the version number
-
-    Returns:
-
-        String that contains the assembly informational version
-
-#>
-Function getAssemblyInformationalVersionFromFile([string]$path)
-{
-    $assemblyInformationalVersion = [system.io.file]::ReadAllText($path)
-    $assemblyInformationalVersion = $assemblyInformationalVersion -replace "`r|`n", ""
-    Return $assemblyInformationalVersion
+    $configuration = Get-VSTSConfiguration($env:VSTSCONFIGFILE)
+    Return [string]::Format("{0}.{1}.{2}.{3}", $configuration.Version.Major, $configuration.Version.Minor, $configuration.Version.Patch, $env:BUILD_BUILDID);
 }
 
 <#
@@ -70,7 +93,7 @@ Function getAssemblyInformationalVersionFromFile([string]$path)
         Base 64 string that represents the authorization bytes
 
 #>    
-function getAuthorizationBytes([string]$username, [string] $accessToken)
+Function Get-AuthorizationBytes([string]$username, [string] $accessToken)
 {
     $authorizationString = "{0}:{1}" -f $username, $accessToken
     $authorizationBytes = [System.Text.Encoding]::Ascii.GetBytes($authorizationString)
@@ -95,7 +118,7 @@ function getAuthorizationBytes([string]$username, [string] $accessToken)
         Web response object
 
 #>
-function getWebRequest([string]$uri, [string]$method, [hashtable]$headers, [hashtable]$parameters)
+function Get-WebRequest([string]$uri, [string]$method, [hashtable]$headers, [hashtable]$parameters)
 {
     $uriObject = New-Object -TypeName System.Uri -ArgumentList($uri)
     $parametersJSON = $parameters | ConvertTo-Json
@@ -135,7 +158,7 @@ function getWebRequest([string]$uri, [string]$method, [hashtable]$headers, [hash
         Web response object
 
 #>
-function uploadFile([string]$uri, [string]$filepath, [hashtable]$headers)
+function UploadFile([string]$uri, [string]$filepath, [hashtable]$headers)
 {
     $uriObject = New-Object -TypeName System.Uri -ArgumentList($uri)
     
@@ -151,3 +174,10 @@ function uploadFile([string]$uri, [string]$filepath, [hashtable]$headers)
     return $response
 }
 
+Export-ModuleMember -function Get-VSLatestVersion
+Export-ModuleMember -function Get-VSRootPath
+Export-ModuleMember -function Get-VSTSConfiguration
+Export-ModuleMember -function Get-AssemblyVersion
+Export-ModuleMember -function Get-AuthorizationBytes
+Export-ModuleMember -function Get-WebRequest
+Export-ModuleMember -function UploadFile

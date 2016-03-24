@@ -1,0 +1,42 @@
+{
+  "id": "4C026F0E-7D82-454D-9318-780AFD53E47B",
+  "name": "StartVSPerfMon",
+  "friendlyName": "Start VS Performance Monitor",
+  "description": "Starts that VS performance monitor with /Start:coverage option",
+  "category": "Dependency",
+  "visibility": [
+                "Build"
+                ],
+  "author": "afuzzyllama",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "groups": [
+    {
+      "name": "monitorConfiguration",
+      "displayName": "Monitor Configuration",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "OutputFile",
+      "type": "filePath",
+      "label": "Output File Path",
+      "required": true,
+      "helpMarkDown": "Output file set with /Output option",
+      "groupName": "monitorConfiguration"
+    }
+  ],
+  "minimumAgentVersion": "1.89.0",
+  "instanceNameFormat": "Start VS Performance Monitor",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\StartVSPerfMon.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}
